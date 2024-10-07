@@ -3,12 +3,12 @@ import random
 
 root = tk.Tk()
 root.title("Password Protected Animation")
-root.attributes("-fullscreen", True) 
+root.attributes("-fullscreen", True)
 
-#password
+
 PASSWORD = "sweetsecret"
 
-def check_password():
+def check_password(event=None): 
     entered_password = password_entry.get()
     
     if entered_password == PASSWORD:
@@ -19,7 +19,7 @@ def check_password():
 def show_thoughts_animation():
     animation_window = tk.Toplevel(root)
     animation_window.title("Random Thoughts Animation")
-    animation_window.attributes("-fullscreen", True) 
+    animation_window.attributes("-fullscreen", True)
 
     canvas = tk.Canvas(animation_window, width=600, height=600, bg='black')
     canvas.pack(fill="both", expand=True)
@@ -52,24 +52,26 @@ def show_thoughts_animation():
             thought_text = canvas.create_text(x, y, text=thought, font=("Arial", 18), fill='green')
             thought_texts.append(thought_text)
 
-
         def move_thoughts():
             for thought_text in thought_texts:
-                canvas.move(thought_text, 0, -1.5) 
+                canvas.move(thought_text, 0, -3)  
             root.update()
-
 
         for _ in range(80):  
             move_thoughts()
-            canvas.after(100)
-
+            canvas.after(50)  
 
         canvas.delete("all")
         canvas.create_text(animation_window.winfo_width() // 2, animation_window.winfo_height() // 2, 
                            text="You are hacked!", font=("Arial", 40), fill='red')
 
+  
+        root.bind('<Return>', close_application)
 
     root.after(100, animate_thoughts)
+
+def close_application(event=None):
+    root.quit()
 
 
 password_label = tk.Label(root, text="Enter Password:", font=("Arial", 14))
@@ -77,9 +79,10 @@ password_label.pack(pady=20)
 password_entry = tk.Entry(root, show="*", font=("Arial", 14))
 password_entry.pack(pady=10)
 
-
 submit_button = tk.Button(root, text="Submit", font=("Arial", 14), command=check_password)
 submit_button.pack(pady=20)
 
+
+root.bind('<Return>', check_password)
 
 root.mainloop()
